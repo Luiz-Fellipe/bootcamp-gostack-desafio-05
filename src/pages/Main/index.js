@@ -12,6 +12,7 @@ export default class Main extends Component {
     repositories: [],
     loading: false,
     error: false,
+    duplicateRepo: false,
   };
 
   componentDidMount() {
@@ -40,7 +41,17 @@ export default class Main extends Component {
     const { newRepo, repositories } = this.state;
 
     try {
-      this.setState({ loading: true, error: false });
+      this.setState({ loading: true, error: false, duplicateRepo: false });
+
+      // verificando se o repositório ja não existe
+      const repoExist = repositories.find(
+        repository => repository.name.toLowerCase() === newRepo.toLowerCase()
+      );
+
+      if (repoExist) {
+        this.setState({ duplicateRepo: true });
+        throw new Error('Repositório duplicado');
+      }
 
       const response = await api.get(`/repos/${newRepo}`);
 
@@ -59,7 +70,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { newRepo, loading, error, repositories } = this.state;
+    const { newRepo, loading, error, repositories, duplicateRepo } = this.state;
     return (
       <Container>
         <h1>
@@ -84,7 +95,13 @@ export default class Main extends Component {
           </SubmitButton>
         </Form>
 
-        {this.state.error && <RepoError>Repositório não existe !</RepoError>}
+        {error && (
+          <RepoError>
+            {duplicateRepo
+              ? 'Repositório já existe !'
+              : 'Repositório não encontrado'}
+          </RepoError>
+        )}
 
         <List>
           {repositories.map(repository => (
