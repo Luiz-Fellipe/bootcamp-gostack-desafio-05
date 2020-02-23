@@ -110,3 +110,31 @@ export const FilterContainer = styled.div`
     color: #999;
   }
 `;
+
+export const Pagination = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+
+  button {
+    background: #7159c1;
+    border: none;
+    border-radius: 2px;
+    padding: 5px;
+    color: #fff;
+    font-weight: bold;
+
+    &:hover {
+      background: #5b479b;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      &:hover {
+        background: #7159c1;
+      }
+    }
+  }
+`;

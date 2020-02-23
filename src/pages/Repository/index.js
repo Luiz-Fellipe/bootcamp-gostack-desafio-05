@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList, FilterContainer } from './styles';
+import {
+  Loading,
+  Owner,
+  IssueList,
+  FilterContainer,
+  Pagination,
+} from './styles';
 
 export default class Repository extends Component {
   // Validando Propriedades
@@ -30,11 +36,12 @@ export default class Repository extends Component {
       { state: 'closed', label: 'Fechadas', active: false },
     ],
     filterIndex: 0,
+    page: 1,
   };
 
   async componentDidMount() {
     const { match } = this.props;
-    const { filters } = this.state;
+    const { filters, page } = this.state;
     const repoName = decodeURIComponent(match.params.repository);
 
     // Realizando duas chamadas a api ao mesmo tempo
@@ -45,7 +52,8 @@ export default class Repository extends Component {
       api.get(`/repos/${repoName}/issues`, {
         params: {
           state: filters.find(f => f.active).state,
-          per_page: 5,
+          per_page: 30,
+          page,
         },
       }),
     ]);
@@ -58,23 +66,32 @@ export default class Repository extends Component {
   }
 
   handleChange = async e => {
-    await this.setState({ filterIndex: e.target.value });
+    await this.setState({ filterIndex: e.target.value, page: 1 });
     this.loadRepoAndIssues();
   };
 
   loadRepoAndIssues = async () => {
     const { match } = this.props;
-    const { filters, filterIndex } = this.state;
+    const { filters, filterIndex, page } = this.state;
     const repoName = decodeURIComponent(match.params.repository);
 
     const response = await api.get(`/repos/${repoName}/issues`, {
       params: {
         state: filters[filterIndex].state,
-        per_page: 5,
+        per_page: 30,
+        page,
       },
     });
-
+    console.log(response);
     this.setState({ issues: response.data });
+  };
+
+  handlePage = async action => {
+    const { page } = this.state;
+
+    await this.setState({ page: action === 'back' ? page - 1 : page + 1 });
+
+    this.loadRepoAndIssues();
   };
 
   render() {
@@ -83,6 +100,7 @@ export default class Repository extends Component {
     if (loading) {
       return <Loading>Carregando...</Loading>;
     }
+
     return (
       <Container>
         <Owner>
@@ -93,9 +111,11 @@ export default class Repository extends Component {
         </Owner>
 
         <FilterContainer>
-          <select onChange={this.handleChange}>
+          <select disabled={issues.length === 0} onChange={this.handleChange}>
             {filters.map((filter, index) => (
-              <option value={index}>{filter.label}</option>
+              <option key={filter.state} value={index}>
+                {filter.label}
+              </option>
             ))}
           </select>
         </FilterContainer>
@@ -116,6 +136,22 @@ export default class Repository extends Component {
             </li>
           ))}
         </IssueList>
+        <Pagination>
+          <button
+            type="button"
+            disabled={this.state.page === 1}
+            onClick={() => this.handlePage('back')}
+          >
+            Anterior
+          </button>
+          <button
+            disabled={this.state.issues.length === 0}
+            type="button"
+            onClick={() => this.handlePage('next')}
+          >
+            Próximo
+          </button>
+        </Pagination>
       </Container>
     );
   }
