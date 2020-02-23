@@ -14,6 +14,7 @@ export const Owner = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-bottom: 1px solid #eee;
 
   a {
     text-decoration: none;
@@ -35,13 +36,11 @@ export const Owner = styled.header`
     margin-top: 5px;
     max-width: 400px;
     text-align: center;
+    margin-bottom: 30px;
   }
 `;
 
 export const IssueList = styled.ul`
-  padding-top: 30px;
-  margin-top: 30px;
-  border-top: 1px solid #eee;
   list-style: none;
 
   li {
@@ -95,5 +94,19 @@ export const IssueList = styled.ul`
       font-size: 12px;
       color: #999;
     }
+  }
+`;
+
+export const FilterContainer = styled.div`
+  margin: 30px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  select {
+    flex: 1;
+    background: none;
+    border-radius: 2px;
+    padding: 5px 10px;
+    color: #999;
   }
 `;
