@@ -7,7 +7,7 @@ export const Form = styled.form`
 
   input {
     flex: 1;
-    border: 1px solid #eee;
+    border: ${props => (props.error ? '1px solid #ff0000' : '1px solid #eee')};
     padding: 10px;
     border-radius: 4px;
     font-size: 16px;
@@ -73,4 +73,10 @@ export const List = styled.ul`
       text-decoration: none;
     }
   }
+`;
+
+export const RepoError = styled.small`
+  margin-top: 40px;
+  color: #ff0000;
+  font-size: 10px;
 `;

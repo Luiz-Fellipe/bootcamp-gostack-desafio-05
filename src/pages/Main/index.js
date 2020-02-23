@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Container from '../../components/Container';
-import { Form, SubmitButton, List } from './styles';
+import { Form, SubmitButton, List, RepoError } from './styles';
 
 import api from '../../services/api';
 
@@ -11,6 +11,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    error: false,
   };
 
   componentDidMount() {
@@ -38,23 +39,27 @@ export default class Main extends Component {
 
     const { newRepo, repositories } = this.state;
 
-    this.setState({ loading: true });
+    try {
+      this.setState({ loading: true, error: false });
 
-    const response = await api.get(`/repos/${newRepo}`);
+      const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const data = {
+        name: response.data.full_name,
+      };
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+      });
+    } catch (err) {
+      this.setState({ error: true, loading: false });
+    }
   };
 
   render() {
-    const { newRepo, loading, repositories } = this.state;
+    const { newRepo, loading, error, repositories } = this.state;
     return (
       <Container>
         <h1>
@@ -62,13 +67,14 @@ export default class Main extends Component {
           Repositórios
         </h1>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} error={error}>
           <input
             type="text"
             placeholder="Informe o nome do repositório"
             value={newRepo}
             onChange={this.handleInputChange}
           />
+
           <SubmitButton loading={loading}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
@@ -77,6 +83,8 @@ export default class Main extends Component {
             )}
           </SubmitButton>
         </Form>
+
+        {this.state.error && <RepoError>Repositório não existe !</RepoError>}
 
         <List>
           {repositories.map(repository => (
