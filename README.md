@@ -32,17 +32,7 @@
 
 Nesse desafio adicionei novas funcionalidades na aplicação que foi desenvolvida ao longo desse módulo.
 
-## Tela da Aplicação
-<img src=".github/1.png " alt="Kitten"
-	title="A cute kitten" width="300" height="300" />
-  <img src=".github/2.png " alt="Kitten"
-	title="A cute kitten" width="300" height="300" />
-  <img src=".github/3.png " alt="Kitten"
-	title="A cute kitten" width="300" height="300" />
-  <img src=".github/4.png " alt="Kitten"
-	title="A cute kitten" width="300" height="300" />
-  <img src=".github/5.png " alt="Kitten"
-	title="A cute kitten" width="300" height="300" />
+
 
 
 ## Funcionalidades
@@ -67,3 +57,15 @@ Adicionei paginação nas issues listadas no detalhe do repositório.
 
 Adicionei apenas um botão de próxima página e página anterior. O botão de página anterior fica desativado na primeira página.
 
+
+## Tela da Aplicação
+<img src=".github/1.png " alt="Kitten"
+	title="A cute kitten" width="650" height="650" />
+  <img src=".github/2.png " alt="Kitten"
+	title="A cute kitten" width="650" height="650" />
+  <img src=".github/3.png " alt="Kitten"
+	title="A cute kitten" width="650" height="650" />
+  <img src=".github/4.png " alt="Kitten"
+	title="A cute kitten" width="650" height="650" />
+  <img src=".github/5.png " alt="Kitten"
+	title="A cute kitten" width="650" height="650" />
